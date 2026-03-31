@@ -58,3 +58,127 @@ This question inspired my project as I explored every possible opening move and 
 </section>
 </body>
 </html>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Chess Opening Analyzer</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #f0f4f8;
+      text-align: center;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    input, select, button {
+      padding: 8px;
+      margin: 5px;
+    }
+
+    table {
+      margin: 20px auto;
+      border-collapse: collapse;
+      width: 70%;
+      background: white;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+
+    th {
+      background: #333;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>The Power of the First Move</h1>
+<p>Track which chess openings win the most games ♟️</p>
+
+<!-- Input Section -->
+<div>
+  <input type="text" id="opening" placeholder="Opening (e.g. Sicilian Defense)">
+  
+  <select id="result">
+    <option value="win">Win</option>
+    <option value="loss">Loss</option>
+  </select>
+
+  <button onclick="addGame()">Add Game</button>
+</div>
+
+<!-- Table -->
+<table id="dataTable">
+  <tr>
+    <th>Opening</th>
+    <th>Wins</th>
+    <th>Losses</th>
+    <th>Win Rate</th>
+  </tr>
+</table>
+
+<script>
+  let data = {};
+
+  function addGame() {
+    let opening = document.getElementById("opening").value;
+    let result = document.getElementById("result").value;
+
+    if (opening === "") return;
+
+    if (!data[opening]) {
+      data[opening] = { wins: 0, losses: 0 };
+    }
+
+    if (result === "win") {
+      data[opening].wins++;
+    } else {
+      data[opening].losses++;
+    }
+
+    updateTable();
+    document.getElementById("opening").value = "";
+  }
+
+  function updateTable() {
+    let table = document.getElementById("dataTable");
+
+    // Clear table except header
+    table.innerHTML = `
+      <tr>
+        <th>Opening</th>
+        <th>Wins</th>
+        <th>Losses</th>
+        <th>Win Rate</th>
+      </tr>
+    `;
+
+    for (let opening in data) {
+      let wins = data[opening].wins;
+      let losses = data[opening].losses;
+      let total = wins + losses;
+      let winRate = ((wins / total) * 100).toFixed(1) + "%";
+
+      let row = `
+        <tr>
+          <td>${opening}</td>
+          <td>${wins}</td>
+          <td>${losses}</td>
+          <td>${winRate}</td>
+        </tr>
+      `;
+
+      table.innerHTML += row;
+    }
+  }
+</script>
+
+</body>
+</html>
